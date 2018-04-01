@@ -10,7 +10,7 @@ class Demo extends React.Component {
     return (
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         <Box width={800} height={200}>
-          <Tailor isSingleLine>Short</Tailor>
+          <Tailor isSingleLine>Short Text</Tailor>
         </Box>
         <Box width={160} height={200}>
           <Tailor isSingleLine>Much Longer Text</Tailor>
