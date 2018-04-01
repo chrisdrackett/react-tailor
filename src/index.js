@@ -8,18 +8,25 @@ type Props = {
    * treat the text as a single line, add an elipsis if we hit our minimum size.
    */
   isSingleLine: boolean,
+  /**
+   * The minimum size text will be sized down to
+   */
   minSize: number,
+
   children?: React.Node,
   style?: {},
 }
 
 type State = {
-  doneSizing: boolean,
-  finalSize: number,
   firstRun: boolean,
+  needsSecondPass: boolean,
+  doneSizing: boolean,
+
+  finalSize: number,
 }
 
 export default class Tailor extends React.Component<Props, State> {
+  resizeTimer: TimeoutID
   innerChild = React.createRef()
   outerChild = React.createRef()
 
@@ -29,17 +36,41 @@ export default class Tailor extends React.Component<Props, State> {
   }
 
   state = {
-    doneSizing: false,
     firstRun: true,
+    needsSecondPass: false,
+
+    doneSizing: false,
     finalSize: 0,
   }
 
   componentDidMount() {
     this.processText()
+
+    window.addEventListener('resize', this.handleWindowResize)
   }
 
   componentDidUpdate() {
     this.processText()
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleWindowResize)
+  }
+
+  handleWindowResize = () => {
+    clearTimeout(this.resizeTimer)
+    this.resizeTimer = setTimeout(() => {
+      if (this.state.needsSecondPass) {
+        this.causeResize()
+      }
+    }, 250)
+  }
+
+  causeResize = () => {
+    this.setState({
+      doneSizing: false,
+      finalSize: 0,
+    })
   }
 
   processText = () => {
@@ -67,7 +98,12 @@ export default class Tailor extends React.Component<Props, State> {
       const finalSize = mid - 1
 
       content.style.fontSize = finalSize + 'px'
-      this.setState({ finalSize, doneSizing: true })
+
+      this.setState((state) => ({
+        finalSize,
+        doneSizing: true,
+        needsSecondPass: !state.firstRun,
+      }))
     }
   }
 
@@ -95,7 +131,6 @@ export default class Tailor extends React.Component<Props, State> {
       <Measure
         bounds
         onResize={(contentRect) => {
-          console.log('resize!')
           if (this.state.firstRun) {
             // We don't need to kick off a resize on the first run as
             // we'll already be doing one
@@ -103,10 +138,7 @@ export default class Tailor extends React.Component<Props, State> {
           } else {
             // If this isn't the first run, we do want to resize the text as
             // this elements size has changed
-            this.setState({
-              doneSizing: false,
-              finalSize: 0,
-            })
+            this.causeResize()
           }
         }}
       >
