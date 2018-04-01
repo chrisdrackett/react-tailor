@@ -14,14 +14,14 @@ type Props = {
 }
 
 type State = {
-  width: number,
-  height: number,
   doneSizing: boolean,
   finalSize: number,
+  firstRun: boolean,
 }
 
 export default class Tailor extends React.Component<Props, State> {
   innerChild = React.createRef()
+  outerChild = React.createRef()
 
   static defaultProps = {
     isSingleLine: false,
@@ -29,33 +29,45 @@ export default class Tailor extends React.Component<Props, State> {
   }
 
   state = {
-    width: 0,
-    height: 0,
     doneSizing: false,
+    firstRun: true,
     finalSize: 0,
   }
 
+  componentDidMount() {
+    this.processText()
+  }
+
   componentDidUpdate() {
+    this.processText()
+  }
+
+  processText = () => {
     if (!this.state.doneSizing) {
       let low, high, mid
       const content = this.innerChild.current
-      // process our size
+
+      const maxWidth = content.parentNode.scrollWidth
 
       low = this.props.minSize
-      high = this.state.height
+      high = content.parentNode.scrollHeight
       mid = 0
 
       while (low <= high) {
         mid = parseInt((low + high) / 2, 10)
         content.style.fontSize = mid + 'px'
-        if (content.scrollWidth <= this.state.width) {
+
+        if (content.scrollWidth <= maxWidth) {
           low = mid + 1
         } else {
           high = mid - 1
         }
       }
 
-      this.setState({ finalSize: mid - 1, doneSizing: true })
+      const finalSize = mid - 1
+
+      content.style.fontSize = finalSize + 'px'
+      this.setState({ finalSize, doneSizing: true })
     }
   }
 
@@ -71,6 +83,8 @@ export default class Tailor extends React.Component<Props, State> {
     }
 
     const contentStyle = {
+      fontSize:
+        this.state.finalSize > 0 ? `${this.state.finalSize}px` : 'inherit',
       display: this.state.doneSizing ? 'block' : 'inline-block',
       whiteSpace: isSingleLine ? 'nowrap' : 'normal',
       overflow: isSingleLine ? 'hidden' : 'visible',
@@ -81,11 +95,19 @@ export default class Tailor extends React.Component<Props, State> {
       <Measure
         bounds
         onResize={(contentRect) => {
-          this.setState({
-            width: contentRect.bounds.width,
-            height: contentRect.bounds.height,
-            doneSizing: false,
-          })
+          console.log('resize!')
+          if (this.state.firstRun) {
+            // We don't need to kick off a resize on the first run as
+            // we'll already be doing one
+            this.setState({ firstRun: false })
+          } else {
+            // If this isn't the first run, we do want to resize the text as
+            // this elements size has changed
+            this.setState({
+              doneSizing: false,
+              finalSize: 0,
+            })
+          }
         }}
       >
         {({ measureRef }) => (
