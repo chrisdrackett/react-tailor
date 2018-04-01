@@ -2,6 +2,7 @@
   "name": "react-tailor",
   "version": "0.1.0",
   "description": "Adjust text size to fit its container.",
+  "license": "MIT",
   "main": "lib/tailor.js",
   "module": "es/tailor.js",
   "files": ["css", "es", "lib", "umd"],
@@ -19,7 +20,6 @@
     "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "dependencies": {
-    "flow-bin": "^0.69.0",
     "react-measure": "^2.0.2"
   },
   "peerDependencies": {
@@ -27,16 +27,16 @@
     "react-dom": "16.x"
   },
   "devDependencies": {
+    "flow-bin": "^0.69.0",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.2",
     "nwb": "0.21.x",
     "prettier": "^1.11.1",
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0"
+    "react-dom": "^16.3.0",
+    "react": "^16.3.0"
   },
   "author": "Chris Drackett <chris@drackett.com>",
   "homepage": "https://github.com/chrisdrackett/react-tailor",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/chrisdrackett/react-tailor"
