@@ -1,15 +1,17 @@
-import React, {Component} from 'react'
-import {render} from 'react-dom'
+import React from 'react'
+import { render } from 'react-dom'
 
-import Example from '../../src'
+import Tailor from '../../src'
 
-class Demo extends Component {
+class Demo extends React.Component {
   render() {
-    return <div>
-      <h1>tailor Demo</h1>
-      <Example/>
-    </div>
+    return (
+      <div>
+        <h1>tailor Demo</h1>
+        <Tailor />
+      </div>
+    )
   }
 }
 
-render(<Demo/>, document.querySelector('#demo'))
+render(<Demo />, document.querySelector('#demo'))

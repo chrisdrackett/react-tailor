@@ -2161,7 +2161,7 @@ cross-spawn@6.0.4:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-cross-spawn@^5.0.0, cross-spawn@^5.0.1:
+cross-spawn@^5.0.1:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
   dependencies:
@@ -3289,6 +3289,10 @@ find-up@^2.0.0, find-up@^2.1.0:
 flatten@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
+
+flow-bin@^0.69.0:
+  version "0.69.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.69.0.tgz#053159a684a6051fcbf0b71a2eb19a9679082da6"
 
 flush-write-stream@^1.0.0:
   version "1.0.3"
@@ -8757,12 +8761,6 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
-
-yarn-or-npm@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/yarn-or-npm/-/yarn-or-npm-2.0.4.tgz#46e38aafce74c350e6c0cca72712fca7410fad98"
-  dependencies:
-    cross-spawn "^5.0.0"
 
 yauzl@2.4.1:
   version "2.4.1"
