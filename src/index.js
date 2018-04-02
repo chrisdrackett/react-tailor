@@ -22,7 +22,15 @@ type State = {
   needsSecondPass: boolean,
   doneSizing: boolean,
 
-  finalSize: number,
+  minTextSize: number,
+
+  maxWidth: number,
+  maxHeight: number,
+
+  low: number,
+  high: number,
+
+  finalTextSize: number,
 }
 
 export default class Tailor extends React.Component<Props, State> {
@@ -38,15 +46,30 @@ export default class Tailor extends React.Component<Props, State> {
   state = {
     firstRun: true,
     needsSecondPass: false,
-
     doneSizing: false,
-    finalSize: 0,
+
+    minTextSize: 0,
+
+    maxWidth: 0,
+    maxHeight: 0,
+
+    low: 0,
+    high: 0,
+
+    finalTextSize: 0,
+  }
+
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    return {
+      ...prevState,
+      minTextSize: nextProps.minSize,
+    }
   }
 
   componentDidMount() {
-    this.processText()
+    this.causeResize()
 
-    window.addEventListener('resize', this.handleWindowResize)
+    // window.addEventListener('resize', this.handleWindowResize)
   }
 
   componentDidUpdate() {
@@ -54,7 +77,7 @@ export default class Tailor extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleWindowResize)
+    // window.removeEventListener('resize', this.handleWindowResize)
   }
 
   handleWindowResize = () => {
@@ -67,43 +90,57 @@ export default class Tailor extends React.Component<Props, State> {
   }
 
   causeResize = () => {
+    const parent = this.innerChild.current.parentNode
+
     this.setState({
       doneSizing: false,
-      finalSize: 0,
+
+      maxWidth: parent.scrollWidth,
+      maxHeight: parent.scrollHeight,
+
+      low: this.state.minTextSize,
+      high: parent.scrollHeight,
+
+      finalTextSize: 0,
     })
   }
 
   processText = () => {
     if (!this.state.doneSizing) {
-      let low, high, mid
-      const content = this.innerChild.current
+      this.setState((state) => {
+        let low = state.low
+        let high = state.high
+        let doneSizing = state.doneSizing
+        let finalTextSize = state.finalTextSize
 
-      const maxWidth = content.parentNode.scrollWidth
+        if (low > high) {
+          doneSizing = true
 
-      low = this.props.minSize
-      high = content.parentNode.scrollHeight
-      mid = 0
-
-      while (low <= high) {
-        mid = parseInt((low + high) / 2, 10)
-        content.style.fontSize = mid + 'px'
-
-        if (content.scrollWidth <= maxWidth) {
-          low = mid + 1
-        } else {
-          high = mid - 1
+          finalTextSize = finalTextSize - 1
         }
-      }
 
-      const finalSize = mid - 1
+        if (!doneSizing) {
+          // if this isn't the first pass do some adjustments
+          if (finalTextSize > 0) {
+            if (this.innerChild.current.scrollWidth <= state.maxWidth) {
+              low = finalTextSize + 1
+            } else {
+              high = finalTextSize - 1
+            }
+          }
 
-      content.style.fontSize = finalSize + 'px'
+          finalTextSize = parseInt((low + high) / 2, 10)
+        }
 
-      this.setState((state) => ({
-        finalSize,
-        doneSizing: true,
-        needsSecondPass: !state.firstRun,
-      }))
+        return {
+          low,
+          high,
+
+          finalTextSize,
+
+          doneSizing,
+        }
+      })
     }
   }
 
@@ -120,7 +157,9 @@ export default class Tailor extends React.Component<Props, State> {
 
     const contentStyle = {
       fontSize:
-        this.state.finalSize > 0 ? `${this.state.finalSize}px` : 'inherit',
+        this.state.finalTextSize > 0
+          ? `${this.state.finalTextSize}px`
+          : 'inherit',
       display: this.state.doneSizing ? 'block' : 'inline-block',
       whiteSpace: isSingleLine ? 'nowrap' : 'normal',
       overflow: isSingleLine ? 'hidden' : 'visible',
@@ -129,7 +168,6 @@ export default class Tailor extends React.Component<Props, State> {
 
     return (
       <Measure
-        bounds
         onResize={(contentRect) => {
           if (this.state.firstRun) {
             // We don't need to kick off a resize on the first run as
