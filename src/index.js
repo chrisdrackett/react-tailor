@@ -28,7 +28,6 @@ type State = {
 export default class Tailor extends React.Component<Props, State> {
   resizeTimer: TimeoutID
   innerChild = React.createRef()
-  outerChild = React.createRef()
 
   static defaultProps = {
     isSingleLine: false,
