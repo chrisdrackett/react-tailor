@@ -19,7 +19,6 @@ type Props = {
 
 type State = {
   firstRun: boolean,
-  needsSecondPass: boolean,
   doneSizing: boolean,
 
   finalSize: number,
@@ -36,7 +35,6 @@ export default class Tailor extends React.Component<Props, State> {
 
   state = {
     firstRun: true,
-    needsSecondPass: false,
 
     doneSizing: false,
     finalSize: 0,
@@ -44,25 +42,10 @@ export default class Tailor extends React.Component<Props, State> {
 
   componentDidMount() {
     this.processText()
-
-    window.addEventListener('resize', this.handleWindowResize)
   }
 
   componentDidUpdate() {
     this.processText()
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleWindowResize)
-  }
-
-  handleWindowResize = () => {
-    clearTimeout(this.resizeTimer)
-    this.resizeTimer = setTimeout(() => {
-      if (this.state.needsSecondPass) {
-        this.causeResize()
-      }
-    }, 250)
   }
 
   causeResize = () => {
@@ -76,32 +59,26 @@ export default class Tailor extends React.Component<Props, State> {
     if (!this.state.doneSizing) {
       let low, high, mid
       const content = this.innerChild.current
-
       const maxWidth = content.parentNode.scrollWidth
+
+      const startSize = parseFloat(
+        window.getComputedStyle(content, null).getPropertyValue('font-size'),
+      )
 
       low = this.props.minSize
       high = content.parentNode.scrollHeight
-      mid = 0
 
-      while (low <= high) {
-        mid = parseInt((low + high) / 2, 10)
-        content.style.fontSize = mid + 'px'
+      let finalSize = startSize / content.scrollWidth * maxWidth - 2
 
-        if (content.scrollWidth <= maxWidth) {
-          low = mid + 1
-        } else {
-          high = mid - 1
-        }
+      if (finalSize < low) {
+        finalSize = low
       }
-
-      const finalSize = mid - 1
 
       content.style.fontSize = finalSize + 'px'
 
       this.setState((state) => ({
         finalSize,
         doneSizing: true,
-        needsSecondPass: !state.firstRun,
       }))
     }
   }
@@ -121,9 +98,9 @@ export default class Tailor extends React.Component<Props, State> {
       fontSize:
         this.state.finalSize > 0 ? `${this.state.finalSize}px` : 'inherit',
       display: this.state.doneSizing ? 'block' : 'inline-block',
-      whiteSpace: isSingleLine ? 'nowrap' : 'normal',
-      overflow: isSingleLine ? 'hidden' : 'visible',
-      textOverflow: isSingleLine ? 'ellipsis' : 'clip',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     }
 
     return (
