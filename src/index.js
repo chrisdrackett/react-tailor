@@ -57,24 +57,20 @@ export default class Tailor extends React.Component<Props, State> {
 
   processText = () => {
     if (!this.state.doneSizing) {
-      let low, high, mid
       const content = this.innerChild.current
+
+      const high = content.parentNode.scrollHeight
       const maxWidth = content.parentNode.scrollWidth
 
       const startSize = parseFloat(
         window.getComputedStyle(content, null).getPropertyValue('font-size'),
       )
 
-      low = this.props.minSize
-      high = content.parentNode.scrollHeight
-
       let finalSize = startSize / content.scrollWidth * maxWidth - 2
 
-      if (finalSize < low) {
-        finalSize = low
+      if (finalSize < this.props.minSize) {
+        finalSize = this.props.minSize
       }
-
-      content.style.fontSize = finalSize + 'px'
 
       this.setState((state) => ({
         finalSize,
