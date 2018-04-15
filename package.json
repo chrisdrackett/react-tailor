@@ -28,12 +28,13 @@
   },
   "devDependencies": {
     "flow-bin": "^0.69.0",
+    "glamor": "^2.20.40",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.2",
     "nwb": "0.21.x",
     "prettier": "^1.11.1",
-    "react-dom": "^16.3.0",
-    "react": "^16.3.0"
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0"
   },
   "author": "Chris Drackett <chris@drackett.com>",
   "homepage": "https://github.com/chrisdrackett/react-tailor",
