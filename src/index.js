@@ -8,7 +8,7 @@ type Props = {
    * The minimum size text will be sized down to
    */
   minSize: number,
-  children?: React.Node,
+  children: React.Node,
   style?: {},
 }
 
