@@ -19,6 +19,9 @@ class Demo extends React.Component {
           <Box width={800} height={200}>
             <Tailor isSingleLine>Shorty</Tailor>
           </Box>
+          <Box width={800} height={200}>
+            <Tailor isSingleLine>Short Texty</Tailor>
+          </Box>
           <Box width={160} height={200}>
             <Tailor isSingleLine>Much Longer Text</Tailor>
           </Box>

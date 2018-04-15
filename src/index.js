@@ -80,7 +80,7 @@ export default class Tailor extends React.Component<Props, State> {
 
       // only do height calc if we're in a fixed height element
       if (content.scrollHeight > maxHeight && maxHeight === initialHeight) {
-        finalSize = finalSize / content.scrollHeight * maxHeight - 2
+        finalSize = finalSize / content.scrollHeight * maxHeight
       }
 
       if (finalSize < this.props.minSize) {
