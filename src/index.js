@@ -41,18 +41,20 @@ export default class Tailor extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    this.processText()
-  }
-
-  componentDidUpdate() {
+    // we process on first mount to avoid as much flashing as possible.
     this.processText()
   }
 
   causeResize = () => {
-    this.setState({
-      doneSizing: false,
-      finalSize: 0,
-    })
+    this.setState(
+      {
+        doneSizing: false,
+        finalSize: 0,
+      },
+      () => {
+        this.processText()
+      },
+    )
   }
 
   processText = () => {
@@ -66,6 +68,7 @@ export default class Tailor extends React.Component<Props, State> {
         window.getComputedStyle(content, null).getPropertyValue('font-size'),
       )
 
+      // guess the final size and subtract 2 to reduce and/or eleminate false ellipses
       let finalSize = startSize / content.scrollWidth * maxWidth - 2
 
       // the above got us at the correct width, but the height might be off
@@ -87,10 +90,10 @@ export default class Tailor extends React.Component<Props, State> {
         finalSize = this.props.minSize
       }
 
-      this.setState((state) => ({
+      this.setState({
         finalSize,
         doneSizing: true,
-      }))
+      })
     }
   }
 
@@ -116,8 +119,7 @@ export default class Tailor extends React.Component<Props, State> {
 
     return (
       <Measure
-        bounds
-        onResize={(contentRect) => {
+        onResize={() => {
           if (this.state.firstRun) {
             // We don't need to kick off a resize on the first run as
             // we'll already be doing one
