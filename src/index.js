@@ -98,6 +98,7 @@ export default class Tailor extends React.Component<Props, State> {
       ...style,
 
       // Fill whatever size our parent is
+      display: 'block',
       width: '100%',
       height: '100%',
     }
@@ -126,11 +127,11 @@ export default class Tailor extends React.Component<Props, State> {
         }}
       >
         {({ measureRef }) => (
-          <div ref={measureRef} style={containerStyle} {...otherProps}>
+          <span ref={measureRef} style={containerStyle} {...otherProps}>
             <span ref={this.innerChild} style={contentStyle}>
               {children}
             </span>
-          </div>
+          </span>
         )}
       </Measure>
     )
