@@ -5,14 +5,9 @@ import Measure from 'react-measure'
 
 type Props = {
   /**
-   * treat the text as a single line, add an elipsis if we hit our minimum size.
-   */
-  isSingleLine: boolean,
-  /**
    * The minimum size text will be sized down to
    */
   minSize: number,
-
   children?: React.Node,
   style?: {},
 }
@@ -25,7 +20,6 @@ type State = {
 }
 
 export default class Tailor extends React.Component<Props, State> {
-  resizeTimer: TimeoutID
   innerChild = React.createRef()
 
   static defaultProps = {
@@ -98,7 +92,7 @@ export default class Tailor extends React.Component<Props, State> {
   }
 
   render() {
-    const { isSingleLine, children, style } = this.props
+    const { children, style, ...otherProps } = this.props
 
     const containerStyle = {
       ...style,
@@ -132,7 +126,7 @@ export default class Tailor extends React.Component<Props, State> {
         }}
       >
         {({ measureRef }) => (
-          <div ref={measureRef} style={containerStyle}>
+          <div ref={measureRef} style={containerStyle} {...otherProps}>
             <span ref={this.innerChild} style={contentStyle}>
               {children}
             </span>
