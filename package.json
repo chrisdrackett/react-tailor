@@ -1,6 +1,6 @@
 {
   "name": "react-tailor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Adjust text size to fit its container.",
   "license": "MIT",
   "main": "lib/tailor.js",
