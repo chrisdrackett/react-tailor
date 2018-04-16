@@ -21,6 +21,12 @@ Wrap any child component and calculate its client rect.
 
 ### Props
 
+### `canGrow`: boolean
+
+_default: false_
+
+Can the text size up above its initial size?
+
 #### `minSize`: number
 
 _default: 11_
