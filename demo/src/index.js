@@ -47,7 +47,7 @@ class Demo extends React.Component {
       grid: {
         backgroundColor: white,
 
-        maxWidth: 1200,
+        maxWidth: 1000,
         height: '100%',
         marginLeft: 'auto',
         marginRight: 'auto',
