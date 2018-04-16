@@ -8,6 +8,10 @@ type Props = {
    * The minimum size text will be sized down to
    */
   minSize: number,
+  /**
+   * should the text also get bigger?
+   */
+  canGrow: boolean,
   children: React.Node,
   style?: {},
 }
@@ -23,8 +27,8 @@ export default class Tailor extends React.Component<Props, State> {
   innerChild = React.createRef()
 
   static defaultProps = {
-    isSingleLine: false,
     minSize: 11,
+    canGrow: false,
   }
 
   state = {
@@ -55,8 +59,8 @@ export default class Tailor extends React.Component<Props, State> {
     if (!this.state.doneSizing) {
       const content = this.innerChild.current
 
-      const maxWidth = content.parentNode.scrollWidth
-      const initialHeight = content.parentNode.scrollHeight
+      const maxWidth = content.parentNode.offsetWidth
+      const initialHeight = content.parentNode.offsetHeight
 
       const startSize = parseFloat(
         window.getComputedStyle(content, null).getPropertyValue('font-size'),
@@ -80,6 +84,10 @@ export default class Tailor extends React.Component<Props, State> {
         finalSize = finalSize / content.scrollHeight * maxHeight
       }
 
+      if (finalSize > startSize && !this.props.canGrow) {
+        finalSize = startSize
+      }
+
       if (finalSize < this.props.minSize) {
         finalSize = this.props.minSize
       }
@@ -92,7 +100,7 @@ export default class Tailor extends React.Component<Props, State> {
   }
 
   render() {
-    const { children, style, ...otherProps } = this.props
+    const { minSize, canGrow, children, style, ...otherProps } = this.props
 
     const containerStyle = {
       ...style,
