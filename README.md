@@ -21,7 +21,7 @@ Wrap any child component and calculate its client rect.
 
 ### Props
 
-### `canGrow`: boolean
+#### `canGrow`: boolean
 
 _default: false_
 
