@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/react-tailor.svg)](https://badge.fury.io/js/react-tailor)
 [![Dependency Status](https://david-dm.org/chrisdrackett/react-tailor.svg)](https://david-dm.org/chrisdrackett/react-tailor)
 
-[demo](https://dist-jpzolpoypl.now.sh)
+[demo](https://dist-bhlbtmkxgy.now.sh)
 
 Tailor adjusts the size of text within its children to try and fit it within the available horizontal and vertical space.
 
