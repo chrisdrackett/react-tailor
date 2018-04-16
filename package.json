@@ -34,7 +34,10 @@
     "nwb": "0.21.x",
     "prettier": "^1.11.1",
     "react": "^16.3.0",
-    "react-dom": "^16.3.0"
+    "react-dom": "^16.3.0",
+    "react-markdown": "^3.3.0",
+    "typography": "^0.16.6",
+    "typography-theme-us-web-design-standards": "^0.16.9"
   },
   "author": "Chris Drackett <chris@drackett.com>",
   "homepage": "https://github.com/chrisdrackett/react-tailor",
