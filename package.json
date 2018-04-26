@@ -1,10 +1,10 @@
 {
   "name": "react-tailor",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Adjust text size to fit its container.",
   "license": "MIT",
-  "main": "lib/tailor.js",
-  "module": "es/tailor.js",
+  "main": "lib/index.js",
+  "module": "es/index.js",
   "files": ["css", "es", "lib", "umd"],
   "scripts": {
     "build": "nwb build-react-component",
